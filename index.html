@@ -1,790 +1,1089 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Number Converter & Visual Tutorial</title>
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #0a0e17;
-            --card-bg: rgba(18, 24, 40, 0.8);
-            --accent: #4f8cff;
-            --accent2: #ff5399;
-            --text: #f0f4ff;
-            --muted: #9aa4bf;
-            --border: rgba(255,255,255,0.08);
-            --input-bg: rgba(10,15,25,0.9);
-            --hover: rgba(79,140,255,0.1);
-            --ring: rgba(79,140,255,0.4);
-            --warning: #ffb347;
-            --success: #34d399;
-            --radius: 20px;
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Converter & Binary Trainer</title>
+  <!-- Poppins + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #6366f1;
+      --secondary: #22c55e;
+      --error: #ef4444;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 20px rgba(0,0,0,0.05);
+      --warning: #f59e0b;
+      --accent: #6366f1;
+      --accent2: #a78bfa;
+      --code-bg: #f1f5f9;
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    body.dark {
+      --bg: #020617;
+      --card: #0f172a;
+      --primary: #818cf8;
+      --secondary: #22c55e;
+      --error: #ef4444;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #1e293b;
+      --shadow: 0 4px 20px rgba(0,0,0,0.3);
+      --warning: #f59e0b;
+      --accent: #818cf8;
+      --accent2: #a78bfa;
+      --code-bg: #1e293b;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            background-image:
-                radial-gradient(circle at 20% 30%, rgba(79,140,255,0.08) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(255,83,153,0.07) 0%, transparent 40%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body.rtl { direction: rtl; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+      min-height: 100vh;
+      padding: 24px;
+    }
 
-        .container {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 32px;
-            padding: 36px 32px;
-            width: 100%;
-            max-width: 1000px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05) inset;
-            display: flex;
-            flex-direction: column;
-            gap: 28px;
-            max-height: 95vh;
-            overflow-y: auto;
-        }
-        .container::-webkit-scrollbar { width: 6px; }
-        .container::-webkit-scrollbar-track { background: transparent; }
-        .container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    /* Navbar */
+    .navbar {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      max-width: 1200px;
+      margin: 0 auto 24px;
+    }
+    .navbar-left { display: flex; align-items: center; gap: 12px; }
+    .navbar h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .badge {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid var(--primary);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text);
+    }
+    .badge a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .navbar-actions { display: flex; align-items: center; gap: 10px; }
 
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        .title-section h1 {
-            font-size: 1.9rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-            margin: 0;
-        }
-        .badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 40px;
-            padding: 8px 20px;
-            font-size: 0.9rem;
-            color: var(--muted);
-            white-space: nowrap;
-            backdrop-filter: blur(10px);
-        }
-        .badge .name { color: white; font-weight: 600; }
-        .badge .college-link { color: var(--accent); font-weight: 600; text-decoration: none; transition: color 0.2s; cursor: pointer; }
-        .badge .college-link:hover { color: var(--accent2); text-decoration: underline; }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 14px;
+      border: none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+      background: var(--card);
+      color: var(--text);
+      border: 2px solid var(--border);
+    }
+    .btn:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-primary { background: var(--primary); color: white; border: 2px solid var(--primary); }
+    .btn-primary:hover { background: #4f46e5; }
+    .btn-dark-toggle { background: transparent; font-size: 20px; border: none; cursor: pointer; padding: 8px; }
+    .lang-switch {
+      background: var(--card); border: 2px solid var(--border); color: var(--text);
+      padding: 10px 18px; border-radius: 14px; cursor: pointer; font-weight: 600;
+      font-size: 14px; display: flex; align-items: center; gap: 6px;
+    }
 
-        .lang-switch {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            backdrop-filter: blur(10px);
-            letter-spacing: 0.3px;
-        }
-        .lang-switch:hover { background: var(--hover); border-color: var(--accent); color: var(--accent); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(79,140,255,0.15); }
+    .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    .card { background: var(--card); border-radius: 24px; padding: 28px; box-shadow: var(--shadow); }
 
-        .converter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 18px;
-        }
-        .input-group { display: flex; flex-direction: column; gap: 8px; }
-        .input-group label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-        .input-group label i { font-size: 0.9rem; color: var(--accent); }
+    /* Section Header */
+    .section-header {
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; font-weight: 700; font-size: 22px; margin-bottom: 16px; user-select: none;
+    }
+    .section-header i { transition: transform 0.3s; }
+    .section-header.collapsed i { transform: rotate(-90deg); }
+    .collapsible-content { display: none; }
+    .collapsible-content.show { display: block; }
 
-        .input-group input {
-            width: 100%;
-            background: var(--input-bg);
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            padding: 14px 16px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #fff;
-            text-align: center;
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: 0.5px;
-            transition: all var(--transition);
-            outline: none;
-            backdrop-filter: blur(5px);
-        }
-        .input-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--ring), 0 0 20px rgba(79,140,255,0.2); background: rgba(20,30,50,0.95); }
-        .input-group input.pop-effect { animation: pop 0.3s ease; }
-        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.03); background: rgba(79,140,255,0.15); } 100% { transform: scale(1); } }
+    /* Converter */
+    .converter-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px; margin-bottom: 24px;
+    }
+    .input-group { display: flex; flex-direction: column; gap: 8px; }
+    .input-group label { font-size: 14px; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+    .input-group input {
+      width: 100%; padding: 14px; border-radius: 14px; border: 2px solid var(--border);
+      background: var(--bg); color: var(--text); text-align: center;
+      font-family: 'JetBrains Mono', monospace; font-size: 16px; outline: none; transition: 0.2s;
+    }
+    .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.3); }
 
-        .steps-title {
-            font-weight: 700;
-            color: var(--muted);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-        }
-        .steps-title i { color: var(--accent); font-size: 1.2rem; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); opacity: 0.9; } }
+    .steps-title {
+      font-weight: 700; color: var(--muted); display: flex; align-items: center;
+      gap: 8px; font-size: 18px; margin-bottom: 12px;
+    }
+    .steps-container { display: flex; flex-direction: column; gap: 10px; }
+    .step-card {
+      display: flex; align-items: center; gap: 14px; background: rgba(99,102,241,0.03);
+      border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px;
+      animation: slideFade 0.3s ease forwards;
+    }
+    @keyframes slideFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .step-num { background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+    .step-expression { flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 15px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .step-expression .val { color: var(--primary); font-weight: 700; }
+    .step-remainder { background: rgba(245,158,11,0.1); border: 1px solid var(--warning); border-radius: 10px; padding: 6px 14px; text-align: center; min-width: 70px; }
+    .step-remainder .rem-label { font-size: 11px; color: var(--muted); }
+    .step-remainder .rem-value { font-size: 20px; font-weight: 800; color: var(--warning); }
+    .empty-message { color: var(--muted); text-align: center; padding: 20px; font-style: italic; }
 
-        .steps-container { display: flex; flex-direction: column; gap: 10px; }
-        .step-card {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 14px 18px;
-            transition: all 0.4s ease;
-            animation: slideFade 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-            opacity: 0;
-            backdrop-filter: blur(5px);
-        }
-        .step-card:hover { background: rgba(79,140,255,0.08); border-color: var(--accent); transform: translateX(6px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        @keyframes slideFade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-        .step-num { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; font-weight: 800; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; box-shadow: 0 4px 12px rgba(79,140,255,0.4); }
-        .step-expression { flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #cbd5e1; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-        .step-expression .val { color: var(--accent); font-weight: 700; }
-        .step-expression .frac-text { color: #ff6b9d; font-weight: 500; font-size: 0.8rem; margin-left: 6px; }
-        .step-remainder { background: rgba(20,30,40,0.7); border: 1px solid var(--warning); border-radius: 10px; padding: 6px 14px; text-align: center; min-width: 60px; backdrop-filter: blur(5px); }
-        .step-remainder .rem-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .step-remainder .rem-value { font-size: 1.2rem; font-weight: 800; color: var(--warning); }
+    /* Tutorial */
+    .tutorial-toggle {
+      display: flex; align-items: center; gap: 8px; cursor: pointer;
+      font-weight: 600; color: var(--text); margin: 20px 0 12px; user-select: none; font-size: 18px;
+    }
+    .tutorial-toggle i { transition: transform 0.3s; }
+    .tutorial-toggle.open i { transform: rotate(180deg); }
+    .tutorial-content { display: none; flex-direction: column; gap: 16px; }
+    .tutorial-content.show { display: flex; }
+    .tutorial-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tutorial-btn {
+      padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border);
+      background: transparent; color: var(--text); font-weight: 600; font-size: 14px; cursor: pointer;
+    }
+    .tutorial-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .tutorial-display {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 20px; font-family: 'JetBrains Mono', monospace; min-height: 100px;
+    }
 
-        .empty-message { color: var(--muted); text-align: center; padding: 20px; font-style: italic; opacity: 0.8; }
+    /* Trainer */
+    .trainer-stats { display: flex; justify-content: space-between; color: var(--muted); margin-bottom: 16px; }
+    .question { font-size: 40px; font-weight: 800; text-align: center; margin: 24px 0; }
+    .answer-wrapper { position: relative; margin: 16px 0; }
+    .answer-wrapper input {
+      width: 100%; padding: 16px 50px 16px 20px; border-radius: 16px; border: 2px solid var(--border);
+      background: var(--bg); color: var(--text); font-size: 18px;
+      font-family: 'JetBrains Mono', monospace; outline: none; transition: 0.2s;
+    }
+    .answer-wrapper .submit-icon {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      background: var(--primary); color: white; border: none; border-radius: 12px;
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 18px; transition: 0.2s;
+    }
+    .feedback { margin: 8px 0; font-weight: 600; text-align: center; font-size: 18px; }
+    .progress-bar { height: 10px; background: var(--border); border-radius: 10px; margin-top: 16px; }
+    .progress-fill { height: 100%; width: 0%; background: var(--primary); border-radius: 10px; transition: 0.3s; }
+    .modes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 20px 0; }
+    .mode-btn {
+      padding: 12px; border: 2px solid var(--border); border-radius: 16px;
+      background: transparent; color: var(--text); font-weight: 600; font-size: 13px;
+      cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .mode-btn.active { border-color: var(--primary); background: rgba(99,102,241,0.08); }
+    .stats-row { display: flex; justify-content: center; gap: 24px; margin: 16px 0; flex-wrap: wrap; }
+    .history-box { max-height: 140px; overflow-y: auto; margin-top: 12px; }
+    .history-box li { font-size: 13px; margin-bottom: 4px; }
 
-        /* Tutorial Section – professional icons instead of emojis */
-        .tutorial-toggle {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            font-weight: 700;
-            color: var(--muted);
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            user-select: none;
-            transition: color 0.2s;
-        }
-        .tutorial-toggle:hover { color: var(--accent); }
-        .tutorial-toggle i { transition: transform 0.3s; }
-        .tutorial-toggle.open i { transform: rotate(180deg); }
+    /* DLD Accordion */
+    .dld-accordion { margin-top: 16px; }
+    .dld-section {
+      border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; overflow: hidden;
+      background: var(--card);
+    }
+    .dld-section-header {
+      display: flex; align-items: center; gap: 12px; padding: 18px 20px; cursor: pointer;
+      font-weight: 700; font-size: 17px; user-select: none; transition: 0.2s;
+      background: rgba(99,102,241,0.03);
+    }
+    .dld-section-header:hover { background: rgba(99,102,241,0.06); }
+    .dld-section-header i.chevron { transition: transform 0.3s; margin-left: auto; }
+    .dld-section-header.open i.chevron { transform: rotate(180deg); }
+    .dld-section-header .sec-num {
+      background: var(--primary); color: white; width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;
+    }
+    .dld-section-body {
+      display: none; padding: 20px 24px; border-top: 1px solid var(--border);
+      line-height: 1.8; font-size: 15px;
+    }
+    .dld-section-body.show { display: block; }
+    .dld-section-body h3 { color: var(--primary); margin-bottom: 12px; font-size: 18px; }
+    .dld-section-body h4 { color: var(--accent2); margin: 16px 0 8px; font-size: 16px; }
+    .dld-section-body p { margin-bottom: 10px; color: var(--text); }
+    .dld-section-body ul { margin: 8px 0 12px 24px; }
+    .dld-section-body li { margin-bottom: 4px; }
+    .dld-table {
+      width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .dld-table th, .dld-table td {
+      border: 1px solid var(--border); padding: 10px 12px; text-align: center;
+    }
+    .dld-table th { background: rgba(99,102,241,0.1); font-weight: 700; color: var(--primary); }
+    .dld-code {
+      background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px 18px; font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      overflow-x: auto; white-space: pre-wrap; margin: 10px 0;
+    }
+    .dld-highlight { color: var(--primary); font-weight: 700; }
+    .dld-warning { color: var(--warning); font-weight: 600; }
+    .dld-success { color: var(--secondary); font-weight: 600; }
 
-        .tutorial-content {
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-            animation: fadeSlideIn 0.4s ease;
-        }
-        .tutorial-content.show { display: flex; }
-        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .tutorial-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .tutorial-btn {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 10px 18px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all var(--transition);
-            white-space: nowrap;
-        }
-        .tutorial-btn:hover { background: var(--hover); border-color: var(--accent); color: var(--accent); }
-        .tutorial-btn.active { background: var(--accent); color: #0a0e17; border-color: var(--accent); font-weight: 700; }
-
-        .tutorial-display {
-            background: rgba(10,15,25,0.8);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            font-family: 'JetBrains Mono', monospace;
-            min-height: 200px;
-            animation: fadeSlideIn 0.3s ease;
-        }
-        .tutorial-display .step-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 0;
-            flex-wrap: wrap;
-            animation: slideFade 0.4s ease forwards;
-            opacity: 0;
-        }
-        .tutorial-display .weight-table {
-            display: inline-flex;
-            gap: 4px;
-            margin: 8px 12px;
-        }
-        .tutorial-display .weight-cell {
-            background: rgba(79,140,255,0.15);
-            border: 1px solid rgba(79,140,255,0.3);
-            border-radius: 8px;
-            padding: 6px 10px;
-            text-align: center;
-            font-weight: 700;
-            color: var(--accent);
-            min-width: 36px;
-        }
-        .tutorial-display .weight-cell.header { background: rgba(255,83,153,0.2); border-color: rgba(255,83,153,0.4); color: var(--accent2); }
-        .tutorial-display .digit-cell {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 8px;
-            padding: 6px 10px;
-            text-align: center;
-            font-weight: 700;
-            color: #fff;
-            min-width: 36px;
-            transition: all 0.3s;
-        }
-        .tutorial-display .digit-cell.highlight { background: var(--accent); color: #0a0e17; border-color: var(--accent); }
-        .tutorial-display .arrow { color: var(--accent2); font-weight: 800; font-size: 1.2rem; }
-        .tutorial-display .result-box {
-            display: inline-block;
-            background: rgba(52,211,153,0.2);
-            border: 1px solid var(--success);
-            border-radius: 10px;
-            padding: 8px 16px;
-            color: var(--success);
-            font-weight: 800;
-            font-size: 1.1rem;
-        }
-        .tutorial-display .group-bracket {
-            display: inline-flex;
-            border: 2px dashed var(--warning);
-            border-radius: 10px;
-            padding: 6px 10px;
-            gap: 4px;
-            margin: 4px;
-        }
-
-        @media (max-width: 600px) {
-            .container { padding: 24px 16px; }
-            .converter-grid { grid-template-columns: 1fr 1fr; }
-            .tutorial-display { padding: 16px; }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .navbar h1 { font-size: 22px; }
+      .converter-grid { grid-template-columns: 1fr 1fr; }
+      .question { font-size: 28px; }
+    }
+  </style>
 </head>
-<body class="rtl">
+<body>
 
-<div class="container">
-    <!-- Header -->
-    <div class="header">
-        <div class="title-section">
-            <h1 data-lang="title">Repeated Division by 2</h1>
-        </div>
-        <div class="badge">
-            <i class="fas fa-user" style="color: var(--accent);"></i>
-            <span class="name" data-lang="devName">Omar Karim Abdalsalam</span>
-            <span>|</span>
-            <i class="fas fa-university" style="color: var(--accent);"></i>
-            <a href="https://ci.suez.edu.eg/" target="_blank" rel="noopener noreferrer" class="college-link" data-lang="devCollege">SCU-FCI</a>
-        </div>
-        <button class="lang-switch" id="langToggle">
-            <i class="fas fa-globe"></i> <span data-lang="langLabel">AR</span>
-        </button>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <h1>Converter & Binary Trainer</h1>
+      <div class="badge">
+        <i class="fas fa-user"></i>
+        <span id="devName">Omar Karim Abdalsalam</span> |
+        <a href="https://ci.suez.edu.eg/" target="_blank" id="devCollege">SCU-FCI</a>
+      </div>
     </div>
-
-    <!-- Converter Grid -->
-    <div class="converter-grid">
-        <div class="input-group">
-            <label><i class="fas fa-sort-numeric-down"></i> <span data-lang="decimal">Decimal</span></label>
-            <input type="text" id="decInput" placeholder="0" autocomplete="off" class="num-input" inputmode="numeric">
-        </div>
-        <div class="input-group">
-            <label><i class="fas fa-circle"></i> <span data-lang="binary">Binary</span></label>
-            <input type="text" id="binInput" placeholder="0" autocomplete="off" class="num-input">
-        </div>
-        <div class="input-group">
-            <label><i class="fas fa-hashtag"></i> <span data-lang="octal">Octal</span></label>
-            <input type="text" id="octInput" placeholder="0" autocomplete="off" class="num-input">
-        </div>
-        <div class="input-group">
-            <label><i class="fas fa-code"></i> <span data-lang="hex">Hexadecimal</span></label>
-            <input type="text" id="hexInput" placeholder="0" autocomplete="off" class="num-input">
-        </div>
+    <div class="navbar-actions">
+      <button id="themeToggle" class="btn-dark-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+      <button class="lang-switch" id="langToggle" onclick="switchLanguage()"><i class="fas fa-globe"></i> <span id="langLabel">AR</span></button>
     </div>
+  </div>
 
-    <!-- Division Steps -->
-    <div>
-        <div class="steps-title"><i class="fas fa-list-ol"></i> <span data-lang="stepsTitle">Division Steps (ignore fraction → 1)</span></div>
-        <div class="steps-container" id="stepsContainer"><div class="empty-message" data-lang="emptySteps">Enter a number to see the steps</div></div>
-    </div>
-
-    <!-- Interactive Tutorial Section (Manual Conversion) -->
-    <div>
-        <div class="tutorial-toggle" id="tutorialToggle">
-            <i class="fas fa-chevron-down"></i>
-            <i class="fas fa-chalkboard-teacher" style="color: var(--accent);"></i>
-            <span data-lang="tutorialTitle">Manual Conversion Tutorial</span>
+  <div class="container">
+    <!-- Converter Section -->
+    <div class="card">
+      <div class="section-header" style="cursor:default;"><span data-lang="convTitle">Number Converter</span></div>
+      <div>
+        <div class="converter-grid">
+          <div class="input-group"><label><i class="fas fa-sort-numeric-down"></i> <span data-lang="decimal">Decimal</span></label><input type="text" id="decInput" placeholder="0" autocomplete="off"></div>
+          <div class="input-group"><label><i class="fas fa-circle"></i> <span data-lang="binary">Binary</span></label><input type="text" id="binInput" placeholder="0" autocomplete="off"></div>
+          <div class="input-group"><label><i class="fas fa-hashtag"></i> <span data-lang="octal">Octal</span></label><input type="text" id="octInput" placeholder="0" autocomplete="off"></div>
+          <div class="input-group"><label><i class="fas fa-code"></i> <span data-lang="hex">Hexadecimal</span></label><input type="text" id="hexInput" placeholder="0" autocomplete="off"></div>
         </div>
-        <div class="tutorial-content" id="tutorialContent">
+        <div>
+          <div class="steps-title"><i class="fas fa-list-ol"></i> <span data-lang="stepsTitle">Division Steps (ignore fraction → 1)</span></div>
+          <div class="steps-container" id="stepsContainer"><div class="empty-message" data-lang="emptySteps">Enter a number to see the steps</div></div>
+        </div>
+        <div>
+          <div class="tutorial-toggle" id="tutorialToggle" onclick="toggleTutorial()">
+            <i class="fas fa-chevron-down"></i> <i class="fas fa-chalkboard-teacher"></i> <span data-lang="tutorialTitle">Manual Conversion Tutorial</span>
+          </div>
+          <div class="tutorial-content show" id="tutorialContent">
             <div class="tutorial-buttons" id="tutorialButtons">
-                <button class="tutorial-btn active" data-mode="bin2oct">Binary → Octal</button>
-                <button class="tutorial-btn" data-mode="oct2bin">Octal → Binary</button>
-                <button class="tutorial-btn" data-mode="bin2hex">Binary → Hexadecimal</button>
-                <button class="tutorial-btn" data-mode="hex2bin">Hexadecimal → Binary</button>
-                <button class="tutorial-btn" data-mode="dec2bin">Decimal → Binary</button>
-                <button class="tutorial-btn" data-mode="bin2dec">Binary → Decimal</button>
+              <button class="tutorial-btn active" data-mode="bin2oct">Binary → Octal</button>
+              <button class="tutorial-btn" data-mode="oct2bin">Octal → Binary</button>
+              <button class="tutorial-btn" data-mode="bin2hex">Binary → Hex</button>
+              <button class="tutorial-btn" data-mode="hex2bin">Hex → Binary</button>
+              <button class="tutorial-btn" data-mode="dec2bin">Decimal → Binary</button>
+              <button class="tutorial-btn" data-mode="bin2dec">Binary → Decimal</button>
             </div>
             <div class="tutorial-display" id="tutorialDisplay"></div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
 
-<script>
-    (() => {
-        // ---------- TRANSLATIONS ----------
-        const t = {
-            en: {
-                title: "Repeated Division by 2",
-                decimal: "Decimal", binary: "Binary", octal: "Octal", hex: "Hexadecimal",
-                stepsTitle: "Division Steps (ignore fraction produces 1)",
-                emptySteps: "Enter a number to see the steps",
-                langLabel: "AR",
-                fractionIgnored: "Fraction ignored",
-                noFraction: "No fraction",
-                recordedRemainder: "Recorded remainder",
-                devName: "Omar Karim Abdalsalam",
-                devCollege: "SCU-FCI",
-                tutorialTitle: "Manual Conversion Tutorial",
-                bin2oct: "Binary → Octal",
-                oct2bin: "Octal → Binary",
-                bin2hex: "Binary → Hexadecimal",
-                hex2bin: "Hexadecimal → Binary",
-                dec2bin: "Decimal → Binary",
-                bin2dec: "Binary → Decimal",
-                weight421: "4-2-1",
-                weight8421: "8-4-2-1",
-                step: "Step",
-                group: "Group",
-                result: "Result",
-                noTutorialData: "Please enter a valid number first to see the tutorial."
-            },
-            ar: {
-                title: "القسمة المتكررة على 2",
-                decimal: "عشري", binary: "ثنائي", octal: "ثماني", hex: "ست عشري",
-                stepsTitle: "خطوات القسمة (تجاهل الكسر ينتج 1)",
-                emptySteps: "أدخل رقماً لرؤية الخطوات",
-                langLabel: "EN",
-                fractionIgnored: "تم تجاهل الكسر",
-                noFraction: "لا كسر",
-                recordedRemainder: "الباقي المسجل",
-                devName: "عمر كريم عبد السلام",
-                devCollege: "SCU-FCI",
-                tutorialTitle: "شرح التحويل اليدوي",
-                bin2oct: "ثنائي → ثماني",
-                oct2bin: "ثماني → ثنائي",
-                bin2hex: "ثنائي → ست عشري",
-                hex2bin: "ست عشري → ثنائي",
-                dec2bin: "عشري → ثنائي",
-                bin2dec: "ثنائي → عشري",
-                weight421: "4-2-1",
-                weight8421: "8-4-2-1",
-                step: "الخطوة",
-                group: "مجموعة",
-                result: "الناتج",
-                noTutorialData: "الرجاء إدخال رقم صحيح أولاً لعرض الشرح."
-            }
-        };
+    <!-- Trainer Section (collapsible) -->
+    <div class="card">
+      <div class="section-header collapsed" id="trainerToggle" onclick="toggleTrainer()">
+        <span data-lang="trainerTitle">Binary Trainer (Game)</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="collapsible-content" id="trainerContent">
+        <div style="text-align:right; margin-bottom:12px;">
+          <button class="btn" onclick="resetCurrentMode()"><i class="fas fa-sync-alt"></i> <span data-lang="resetBtn">Reset</span></button>
+        </div>
+        <div class="trainer-stats">
+          <span><i class="fas fa-fire"></i> <span data-lang="level">Level</span> <span id="level">1</span></span>
+          <span><i class="fas fa-star"></i> <span data-lang="score">Score</span>: <span id="score">0</span></span>
+          <span><i class="fas fa-trophy"></i> <span data-lang="totalCorrect">Total Correct</span>: <span id="totalCorrect">0</span></span>
+        </div>
+        <div class="question" id="question">64 ÷ 2 = ?</div>
+        <div class="answer-wrapper">
+          <input type="text" id="answer" placeholder="Enter answer" autocomplete="off">
+          <button class="submit-icon" onclick="checkAnswer()"><i class="fas fa-check"></i></button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="modes-grid" id="modeButtons"></div>
+        <div class="stats-row">
+          <span><i class="fas fa-check-circle"></i> <span data-lang="correct">Correct</span>: <b id="correctCount">0</b></span>
+          <span><i class="fas fa-times-circle"></i> <span data-lang="wrong">Wrong</span>: <b id="wrongCount">0</b></span>
+          <span><i class="fas fa-bullseye"></i> <span data-lang="accuracy">Accuracy</span>: <b id="accuracy">0%</b></span>
+        </div>
+        <div class="history-box">
+          <h4><i class="fas fa-history"></i> <span data-lang="historyTitle">History</span></h4>
+          <ul id="historyList"></ul>
+        </div>
+      </div>
+    </div>
 
-        // ---------- STATE ----------
-        let currentLang = localStorage.getItem('lang') || 'en';
-        let currentDecimal = null;
-        let isUpdating = false;
-        let debounceTimer;
-        let tutorialMode = 'bin2oct';
+    <!-- Digital Logic Design Section -->
+    <div class="card">
+      <div class="section-header" style="cursor:default;">
+        <span data-lang="dldTitle">Digital Logic Design</span>
+        <i class="fas fa-microchip" style="color:var(--primary);"></i>
+      </div>
+      <div class="dld-accordion" id="dldAccordion">
+        <!-- Sections will be injected by JS -->
+      </div>
+    </div>
+  </div>
 
-        // DOM
-        const decInput = document.getElementById('decInput');
-        const binInput = document.getElementById('binInput');
-        const octInput = document.getElementById('octInput');
-        const hexInput = document.getElementById('hexInput');
-        const stepsContainer = document.getElementById('stepsContainer');
-        const langToggle = document.getElementById('langToggle');
-        const allInputs = [decInput, binInput, octInput, hexInput];
-        const tutorialToggle = document.getElementById('tutorialToggle');
-        const tutorialContent = document.getElementById('tutorialContent');
-        const tutorialDisplay = document.getElementById('tutorialDisplay');
-        const tutorialButtons = document.getElementById('tutorialButtons');
+  <script>
+    // ==================== TRANSLATIONS ====================
+    const translations = {
+      en: {
+        devName: "Omar Karim Abdalsalam", devCollege: "SCU-FCI", langLabel: "AR",
+        convTitle: "Number Converter", decimal: "Decimal", binary: "Binary", octal: "Octal", hex: "Hexadecimal",
+        stepsTitle: "Division Steps (ignore fraction → 1)", emptySteps: "Enter a number to see the steps",
+        tutorialTitle: "Manual Conversion Tutorial", noTutorialData: "Please enter a valid integer to see the tutorial.",
+        trainerTitle: "Binary Trainer (Game)", resetBtn: "Reset",
+        level: "Level", score: "Score", totalCorrect: "Total Correct",
+        correct: "Correct", wrong: "Wrong", accuracy: "Accuracy", historyTitle: "History",
+        correctFeedback: "✔ Correct!", wrongFeedback: "❌ Wrong, answer was ",
+        fractionIgnored: "Fraction ignored", noFraction: "No fraction", recordedRemainder: "Remainder",
+        weight421: "4-2-1", weight8421: "8-4-2-1", result: "Result",
+        modeDivide: "÷ Divide by 2", modeMultiply: "× Multiply by 2",
+        modeDec2Bin: "Decimal → Binary", modeDec2Oct: "Decimal → Octal",
+        modeDec2Hex: "Decimal → Hex", modeBin2Dec: "Binary → Decimal",
+        modeOct2Dec: "Octal → Decimal", modeHex2Dec: "Hex → Decimal",
+        dldTitle: "Digital Logic Design",
+        dldSection1Title: "Section 1: Numbering Systems",
+        dldSection2Title: "Section 2: Digital Arithmetic & Conversions",
+        dldSection3Title: "Section 3: Complements",
+        dldSection4Title: "Section 4: Binary Codes",
+        dldSection5Title: "Section 5: Boolean Algebra & Simplification",
+        dldSection6Title: "Section 6: Logic Gates & Truth Tables"
+      },
+      ar: {
+        devName: "عمر كريم عبد السلام", devCollege: "SCU-FCI", langLabel: "EN",
+        convTitle: "محول الأرقام", decimal: "عشري", binary: "ثنائي", octal: "ثماني", hex: "ست عشري",
+        stepsTitle: "خطوات القسمة (تجاهل الكسر → 1)", emptySteps: "أدخل رقماً لرؤية الخطوات",
+        tutorialTitle: "شرح التحويل اليدوي", noTutorialData: "الرجاء إدخال رقم صحيح لعرض الشرح.",
+        trainerTitle: "مدرب التحويلات (لعبة)", resetBtn: "إعادة",
+        level: "المستوى", score: "النقاط", totalCorrect: "الإجمالي الصحيح",
+        correct: "صحيح", wrong: "خطأ", accuracy: "الدقة", historyTitle: "السجل",
+        correctFeedback: "✔ صحيح!", wrongFeedback: "❌ خطأ، الإجابة كانت ",
+        fractionIgnored: "تم تجاهل الكسر", noFraction: "لا يوجد كسر", recordedRemainder: "الباقي",
+        weight421: "4-2-1", weight8421: "8-4-2-1", result: "الناتج",
+        modeDivide: "÷ قسمة على 2", modeMultiply: "× ضرب في 2",
+        modeDec2Bin: "عشري → ثنائي", modeDec2Oct: "عشري → ثماني",
+        modeDec2Hex: "عشري → ست عشري", modeBin2Dec: "ثنائي → عشري",
+        modeOct2Dec: "ثماني → عشري", modeHex2Dec: "ست عشري → عشري",
+        dldTitle: "تصميم المنطق الرقمي",
+        dldSection1Title: "القسم 1: أنظمة العد",
+        dldSection2Title: "القسم 2: العمليات الحسابية والتحويلات",
+        dldSection3Title: "القسم 3: المتممات",
+        dldSection4Title: "القسم 4: الأكواد الرقمية",
+        dldSection5Title: "القسم 5: الجبر البولياني والتبسيط",
+        dldSection6Title: "القسم 6: البوابات المنطقية وجداول الحقيقة"
+      }
+    };
 
-        // ---------- LANGUAGE ----------
-        function setLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('lang', lang);
-            document.documentElement.lang = lang;
-            document.body.classList.toggle('rtl', lang === 'ar');
-            document.querySelectorAll('[data-lang]').forEach(el => {
-                const key = el.getAttribute('data-lang');
-                if (t[lang] && t[lang][key]) el.textContent = t[lang][key];
-            });
-            document.querySelector('.badge .name').textContent = t[lang].devName;
-            document.querySelector('.badge .college-link').textContent = t[lang].devCollege;
-            // Update tutorial button texts
-            document.querySelectorAll('.tutorial-btn').forEach(btn => {
-                const mode = btn.dataset.mode;
-                if (t[lang][mode]) btn.textContent = t[lang][mode];
-            });
-            updateStepsUI();
-            renderTutorial();
+    // ==================== DLD CONTENT (Bilingual) ====================
+    const dldContent = {
+      sec1: {
+        en: `
+          <h3>Numbering Systems</h3>
+          <p>A numbering system defines how numbers are represented. Each system has a <span class="dld-highlight">base (radix)</span> and a set of digits.</p>
+          <table class="dld-table">
+            <tr><th>System</th><th>Base</th><th>Digits</th></tr>
+            <tr><td>Binary</td><td>2</td><td>0, 1</td></tr>
+            <tr><td>Octal</td><td>8</td><td>0–7</td></tr>
+            <tr><td>Decimal</td><td>10</td><td>0–9</td></tr>
+            <tr><td>Hexadecimal</td><td>16</td><td>0–9, A–F</td></tr>
+          </table>
+          <h4>Decimal System</h4>
+          <p>Base-10, uses digits 0–9. Example: <span class="dld-code">1234 = 1×10³ + 2×10² + 3×10¹ + 4×10⁰</span></p>
+          <h4>Binary System</h4>
+          <p>Base-2, uses only 0 and 1 (bits). A group of 8 bits = 1 byte. Example: <span class="dld-code">(10101)₂</span></p>
+          <h4>Hexadecimal System</h4>
+          <p>Base-16, uses 0–9 and A–F where A=10, B=11, C=12, D=13, E=14, F=15.</p>
+          <h4>Octal System</h4>
+          <p>Base-8, uses digits 0–7. Example: <span class="dld-code">(12570)₈</span></p>
+          <h4>Decimal ↔ Binary Conversion</h4>
+          <p><strong>Integer part:</strong> Repeated division by 2, collect remainders bottom-up.</p>
+          <div class="dld-code">25 ÷ 2 = 12 rem 1
+12 ÷ 2 = 6 rem 0
+6 ÷ 2 = 3 rem 0
+3 ÷ 2 = 1 rem 1
+1 ÷ 2 = 0 rem 1
+→ (25)₁₀ = (11001)₂</div>
+          <p><strong>Fraction part:</strong> Repeated multiplication by 2, collect integer parts top-down.</p>
+          <div class="dld-code">0.625 × 2 = 1.25 → 1
+0.25 × 2 = 0.5 → 0
+0.5 × 2 = 1.0 → 1
+→ (0.625)₁₀ = (0.101)₂</div>
+          <p>Example: <span class="dld-highlight">(12.625)₁₀ = (1100.101)₂</span></p>
+          <h4>Binary → Decimal</h4>
+          <p>Sum of (bit × 2^position). Example: <span class="dld-code">(10111)₂ = 16+0+4+2+1 = 23</span></p>
+          <h4>Decimal ↔ Octal</h4>
+          <p>Divide/multiply by 8 instead of 2. <span class="dld-code">(35)₁₀ = (43)₈</span></p>
+          <h4>Decimal ↔ Hexadecimal</h4>
+          <p>Divide/multiply by 16. <span class="dld-code">(43)₁₀ = (2B)₁₆</span></p>
+        `,
+        ar: `
+          <h3>أنظمة العد</h3>
+          <p>نظام العد يحدد كيفية تمثيل الأرقام. لكل نظام <span class="dld-highlight">أساس (base)</span> ومجموعة من الأرقام.</p>
+          <table class="dld-table">
+            <tr><th>النظام</th><th>الأساس</th><th>الأرقام</th></tr>
+            <tr><td>ثنائي</td><td>2</td><td>0, 1</td></tr>
+            <tr><td>ثماني</td><td>8</td><td>0–7</td></tr>
+            <tr><td>عشري</td><td>10</td><td>0–9</td></tr>
+            <tr><td>ست عشري</td><td>16</td><td>0–9, A–F</td></tr>
+          </table>
+          <h4>النظام العشري</h4>
+          <p>أساس 10، يستخدم الأرقام 0–9. مثال: <span class="dld-code">1234 = 1×10³ + 2×10² + 3×10¹ + 4×10⁰</span></p>
+          <h4>النظام الثنائي</h4>
+          <p>أساس 2، يستخدم فقط 0 و 1 (بت). مجموعة 8 بت = 1 بايت.</p>
+          <h4>النظام الست عشري</h4>
+          <p>أساس 16، يستخدم 0–9 و A–F حيث A=10, B=11, C=12, D=13, E=14, F=15.</p>
+          <h4>النظام الثماني</h4>
+          <p>أساس 8، يستخدم الأرقام 0–7.</p>
+          <h4>التحويل من عشري إلى ثنائي</h4>
+          <p><strong>الجزء الصحيح:</strong> قسمة متكررة على 2، جمع البواقي من الأسفل للأعلى.</p>
+          <div class="dld-code">25 ÷ 2 = 12 باقي 1
+12 ÷ 2 = 6 باقي 0
+6 ÷ 2 = 3 باقي 0
+3 ÷ 2 = 1 باقي 1
+1 ÷ 2 = 0 باقي 1
+→ (25)₁₀ = (11001)₂</div>
+          <p><strong>الجزء الكسري:</strong> ضرب متكرر في 2، جمع الأجزاء الصحيحة من الأعلى للأسفل.</p>
+          <div class="dld-code">0.625 × 2 = 1.25 → 1
+0.25 × 2 = 0.5 → 0
+0.5 × 2 = 1.0 → 1
+→ (0.625)₁₀ = (0.101)₂</div>
+          <p>مثال: <span class="dld-highlight">(12.625)₁₀ = (1100.101)₂</span></p>
+          <h4>التحويل من ثنائي إلى عشري</h4>
+          <p>مجموع (بت × 2^الموقع). مثال: <span class="dld-code">(10111)₂ = 16+0+4+2+1 = 23</span></p>
+          <h4>التحويل من/إلى ثماني وست عشري</h4>
+          <p>نفس المبدأ مع القسمة/الضرب على 8 أو 16.</p>
+        `
+      },
+      sec2: {
+        en: `
+          <h3>Digital Arithmetic & Conversions</h3>
+          <h4>Hexadecimal ↔ Binary</h4>
+          <p>Each hex digit = 4 bits.</p>
+          <table class="dld-table">
+            <tr><th>Hex</th><th>Binary</th><th>Hex</th><th>Binary</th></tr>
+            <tr><td>0</td><td>0000</td><td>8</td><td>1000</td></tr>
+            <tr><td>1</td><td>0001</td><td>9</td><td>1001</td></tr>
+            <tr><td>2</td><td>0010</td><td>A</td><td>1010</td></tr>
+            <tr><td>3</td><td>0011</td><td>B</td><td>1011</td></tr>
+            <tr><td>4</td><td>0100</td><td>C</td><td>1100</td></tr>
+            <tr><td>5</td><td>0101</td><td>D</td><td>1101</td></tr>
+            <tr><td>6</td><td>0110</td><td>E</td><td>1110</td></tr>
+            <tr><td>7</td><td>0111</td><td>F</td><td>1111</td></tr>
+          </table>
+          <p>Example: <span class="dld-code">(110011001100)₂ = (CCC)₁₆</span></p>
+          <h4>Octal ↔ Binary</h4>
+          <p>Each octal digit = 3 bits.</p>
+          <p>Example: <span class="dld-code">(7254)₈ = (111010101100)₂</span></p>
+          <h4>Octal ↔ Hexadecimal</h4>
+          <p>Convert through binary: Octal → Binary → Hex (or vice versa).</p>
+          <p>Example: <span class="dld-code">(17.5)₈ = (F.A)₁₆</span></p>
+          <h4>Binary Arithmetic</h4>
+          <p><strong>Addition rules:</strong> 0+0=0, 0+1=1, 1+0=1, 1+1=10 (carry 1), 1+1+1=11 (carry 1).</p>
+          <p><strong>Subtraction:</strong> 0-0=0, 1-0=1, 0-1=1 (borrow 1), 1-1=0.</p>
+          <p><strong>Multiplication:</strong> 0×0=0, 0×1=0, 1×0=0, 1×1=1 (then shift and add).</p>
+          <p><strong>Division:</strong> Similar to decimal long division.</p>
+        `,
+        ar: `
+          <h3>العمليات الحسابية والتحويلات الرقمية</h3>
+          <h4>التحويل بين الست عشري والثنائي</h4>
+          <p>كل خانة ست عشرية = 4 بت.</p>
+          <table class="dld-table">
+            <tr><th>Hex</th><th>Binary</th><th>Hex</th><th>Binary</th></tr>
+            <tr><td>0</td><td>0000</td><td>8</td><td>1000</td></tr>
+            <tr><td>1</td><td>0001</td><td>9</td><td>1001</td></tr>
+            <tr><td>2</td><td>0010</td><td>A</td><td>1010</td></tr>
+            <tr><td>3</td><td>0011</td><td>B</td><td>1011</td></tr>
+            <tr><td>4</td><td>0100</td><td>C</td><td>1100</td></tr>
+            <tr><td>5</td><td>0101</td><td>D</td><td>1101</td></tr>
+            <tr><td>6</td><td>0110</td><td>E</td><td>1110</td></tr>
+            <tr><td>7</td><td>0111</td><td>F</td><td>1111</td></tr>
+          </table>
+          <h4>التحويل بين الثماني والثنائي</h4>
+          <p>كل خانة ثمانية = 3 بت. مثال: <span class="dld-code">(7254)₈ = (111010101100)₂</span></p>
+          <h4>التحويل بين الثماني والست عشري</h4>
+          <p>عن طريق الثنائي: ثماني → ثنائي → ست عشري.</p>
+          <h4>العمليات الحسابية الثنائية</h4>
+          <p><strong>الجمع:</strong> 0+0=0, 0+1=1, 1+0=1, 1+1=10 (حمل 1).</p>
+          <p><strong>الطرح:</strong> 0-0=0, 1-0=1, 0-1=1 (استلاف 1), 1-1=0.</p>
+          <p><strong>الضرب:</strong> 0×0=0, 0×1=0, 1×0=0, 1×1=1 ثم إزاحة وجمع.</p>
+          <p><strong>القسمة:</strong> مشابهة للقسمة المطولة العشرية.</p>
+        `
+      },
+      sec3: {
+        en: `
+          <h3>Complements</h3>
+          <p>Complements simplify subtraction by converting it to addition.</p>
+          <h4>r's Complement (True Complement)</h4>
+          <p>Formula: <span class="dld-code">rⁿ - N</span> (n = number of integer digits)</p>
+          <p><strong>10's complement:</strong> <span class="dld-code">10ⁿ - N</span>. Example: 10's comp of 3456 = 10000 - 3456 = <span class="dld-highlight">6544</span></p>
+          <p><strong>2's complement:</strong> <span class="dld-code">2ⁿ - N</span>. Example: 2's comp of 0101 = <span class="dld-highlight">1011</span></p>
+          <h4>(r-1)'s Complement (Diminished Complement)</h4>
+          <p>Formula: <span class="dld-code">rⁿ - r⁻ᵐ - N</span></p>
+          <p><strong>9's complement:</strong> Subtract each digit from 9. Example: 9's comp of 52389 = <span class="dld-highlight">47610</span></p>
+          <p><strong>1's complement:</strong> Flip all bits (0→1, 1→0). Example: 1's comp of 10110100 = <span class="dld-highlight">01001011</span></p>
+          <p class="dld-success">Note: r's complement = (r-1)'s complement + 1</p>
+          <h4>Subtraction Using Complements</h4>
+          <p><strong>With 2's complement:</strong> A - B = A + (2's comp of B). If carry → discard it (result positive). If no carry → take 2's comp of result (negative).</p>
+          <p><strong>With 1's complement:</strong> A - B = A + (1's comp of B). If carry → discard and add 1 (end-around carry).</p>
+          <h4>Signed Magnitude</h4>
+          <p>MSB = sign bit (0 = positive, 1 = negative). Remaining bits = magnitude.</p>
+          <p>Example (8-bit): +5 = <span class="dld-code">00000101</span>, -5 = <span class="dld-code">10000101</span></p>
+        `,
+        ar: `
+          <h3>المتممات</h3>
+          <p>المتممات تبسط عملية الطرح بتحويلها إلى جمع.</p>
+          <h4>متمم r (المتمم الحقيقي)</h4>
+          <p>الصيغة: <span class="dld-code">rⁿ - N</span> (n = عدد الخانات الصحيحة)</p>
+          <p><strong>متمم 10:</strong> <span class="dld-code">10ⁿ - N</span>. مثال: متمم 10 للعدد 3456 = 10000 - 3456 = <span class="dld-highlight">6544</span></p>
+          <p><strong>متمم 2:</strong> <span class="dld-code">2ⁿ - N</span>. مثال: متمم 2 للعدد 0101 = <span class="dld-highlight">1011</span></p>
+          <h4>متمم (r-1) (المتمم المنقوص)</h4>
+          <p>الصيغة: <span class="dld-code">rⁿ - r⁻ᵐ - N</span></p>
+          <p><strong>متمم 9:</strong> طرح كل خانة من 9. مثال: متمم 9 للعدد 52389 = <span class="dld-highlight">47610</span></p>
+          <p><strong>متمم 1:</strong> قلب جميع البتات. مثال: متمم 1 للعدد 10110100 = <span class="dld-highlight">01001011</span></p>
+          <p class="dld-success">ملاحظة: متمم r = متمم (r-1) + 1</p>
+          <h4>الطرح باستخدام المتممات</h4>
+          <p><strong>بمتمم 2:</strong> A - B = A + متمم 2 لـ B. إذا وجد حمل → احذفه (النتيجة موجبة). لا حمل → خذ متمم 2 للنتيجة (سالبة).</p>
+          <p><strong>بمتمم 1:</strong> A - B = A + متمم 1 لـ B. إذا وجد حمل → احذفه وأضف 1.</p>
+          <h4>تمثيل الإشارة والقيمة (Signed Magnitude)</h4>
+          <p>البت الأكثر أهمية = إشارة (0 موجب، 1 سالب). البتات المتبقية = القيمة.</p>
+        `
+      },
+      sec4: {
+        en: `
+          <h3>Binary Codes</h3>
+          <h4>BCD (Binary Coded Decimal)</h4>
+          <p>Each decimal digit is represented by 4 bits (0000 to 1001). Values 1010–1111 are <span class="dld-warning">invalid</span>.</p>
+          <p>Example: <span class="dld-code">(104)₁₀ = 0001 0000 0100 (BCD)</span></p>
+          <h4>BCD Addition</h4>
+          <p>If sum > 9 or carry occurs → <span class="dld-highlight">add 6 (0110)</span> to correct.</p>
+          <p>Example: 7+6 = 13 → 0111 + 0110 = 1101 (invalid) → +0110 → 0001 0011 (BCD 13).</p>
+          <h4>Gray Code</h4>
+          <p>Unweighted code where only 1 bit changes between consecutive values. Used in Karnaugh maps and encoders.</p>
+          <p><strong>Binary → Gray:</strong> MSB copied. Each next bit: <span class="dld-code">Gₙ = Bₙ XOR Bₙ₋₁</span></p>
+          <p><strong>Gray → Binary:</strong> MSB copied. Each next bit: <span class="dld-code">Bₙ = Bₙ₋₁ XOR Gₙ</span></p>
+          <h4>Excess-3 Code</h4>
+          <p>BCD + 3 (0011). Self-complementary code. <span class="dld-code">Decimal → BCD → Add 3 → Excess-3</span></p>
+          <h4>Parity Bit</h4>
+          <p>Extra bit for error detection. Even parity: total 1s is even. Odd parity: total 1s is odd.</p>
+        `,
+        ar: `
+          <h3>الأكواد الرقمية</h3>
+          <h4>BCD (عشري مشفر ثنائياً)</h4>
+          <p>كل خانة عشرية تمثل بـ 4 بت (0000 إلى 1001). القيم 1010–1111 <span class="dld-warning">غير صالحة</span>.</p>
+          <h4>جمع BCD</h4>
+          <p>إذا كان المجموع > 9 أو حدث حمل → <span class="dld-highlight">أضف 6 (0110)</span> للتصحيح.</p>
+          <h4>كود Gray</h4>
+          <p>كود غير موزون يتغير فيه بت واحد فقط بين القيم المتتالية.</p>
+          <p><strong>ثنائي → Gray:</strong> نسخ MSB. كل بت تالي: <span class="dld-code">Gₙ = Bₙ XOR Bₙ₋₁</span></p>
+          <h4>كود Excess-3</h4>
+          <p>BCD + 3 (0011). كود متمم ذاتي.</p>
+          <h4>بت parity</h4>
+          <p>بت إضافي للكشف عن الأخطاء. Even parity: عدد الـ 1s زوجي. Odd parity: عدد الـ 1s فردي.</p>
+        `
+      },
+      sec5: {
+        en: `
+          <h3>Boolean Algebra & Simplification</h3>
+          <h4>Basic Postulates & Theorems</h4>
+          <table class="dld-table">
+            <tr><th>Law</th><th>AND Form</th><th>OR Form</th></tr>
+            <tr><td>Identity</td><td>x·1 = x</td><td>x+0 = x</td></tr>
+            <tr><td>Complement</td><td>x·x' = 0</td><td>x+x' = 1</td></tr>
+            <tr><td>Idempotent</td><td>x·x = x</td><td>x+x = x</td></tr>
+            <tr><td>Domination</td><td>x·0 = 0</td><td>x+1 = 1</td></tr>
+            <tr><td>Involution</td><td colspan="2">(x')' = x</td></tr>
+            <tr><td>Commutative</td><td>xy = yx</td><td>x+y = y+x</td></tr>
+            <tr><td>Associative</td><td>x(yz) = (xy)z</td><td>x+(y+z) = (x+y)+z</td></tr>
+            <tr><td>Distributive</td><td>x(y+z) = xy + xz</td><td>x+yz = (x+y)(x+z)</td></tr>
+            <tr><td>DeMorgan</td><td>(xy)' = x'+y'</td><td>(x+y)' = x'y'</td></tr>
+            <tr><td>Absorption</td><td>x+xy = x</td><td>x(x+y) = x</td></tr>
+          </table>
+          <h4>Consensus Theorem</h4>
+          <p><span class="dld-code">xy + x'z + yz = xy + x'z</span></p>
+          <h4>Simplification Example</h4>
+          <div class="dld-code">F = AB + AB' = A(B + B') = A·1 = A</div>
+          <div class="dld-code">F = A + AB + ABC = A(1 + B + BC) = A</div>
+        `,
+        ar: `
+          <h3>الجبر البولياني والتبسيط</h3>
+          <h4>المسلّمات والنظريات الأساسية</h4>
+          <table class="dld-table">
+            <tr><th>القانون</th><th>صيغة AND</th><th>صيغة OR</th></tr>
+            <tr><td>المحايد</td><td>x·1 = x</td><td>x+0 = x</td></tr>
+            <tr><td>المتمم</td><td>x·x' = 0</td><td>x+x' = 1</td></tr>
+            <tr><td>التكرار</td><td>x·x = x</td><td>x+x = x</td></tr>
+            <tr><td>السيطرة</td><td>x·0 = 0</td><td>x+1 = 1</td></tr>
+            <tr><td>التبديل</td><td>xy = yx</td><td>x+y = y+x</td></tr>
+            <tr><td>التجميع</td><td>x(yz) = (xy)z</td><td>x+(y+z) = (x+y)+z</td></tr>
+            <tr><td>التوزيع</td><td>x(y+z) = xy+xz</td><td>x+yz = (x+y)(x+z)</td></tr>
+            <tr><td>ديمورجان</td><td>(xy)' = x'+y'</td><td>(x+y)' = x'y'</td></tr>
+            <tr><td>الامتصاص</td><td>x+xy = x</td><td>x(x+y) = x</td></tr>
+          </table>
+          <h4>نظرية Consensus</h4>
+          <p><span class="dld-code">xy + x'z + yz = xy + x'z</span></p>
+        `
+      },
+      sec6: {
+        en: `
+          <h3>Logic Gates & Truth Tables</h3>
+          <h4>Basic Logic Gates</h4>
+          <table class="dld-table">
+            <tr><th>Gate</th><th>Symbol</th><th>Truth Table</th></tr>
+            <tr><td>AND</td><td>A·B</td><td>00→0, 01→0, 10→0, 11→1</td></tr>
+            <tr><td>OR</td><td>A+B</td><td>00→0, 01→1, 10→1, 11→1</td></tr>
+            <tr><td>NOT</td><td>A'</td><td>0→1, 1→0</td></tr>
+            <tr><td>NAND</td><td>(A·B)'</td><td>00→1, 01→1, 10→1, 11→0</td></tr>
+            <tr><td>NOR</td><td>(A+B)'</td><td>00→1, 01→0, 10→0, 11→0</td></tr>
+            <tr><td>XOR</td><td>A⊕B</td><td>00→0, 01→1, 10→1, 11→0</td></tr>
+            <tr><td>XNOR</td><td>A⊙B</td><td>00→1, 01→0, 10→0, 11→1</td></tr>
+          </table>
+          <h4>Truth Table Example</h4>
+          <p>For F = A·B + A·C':</p>
+          <table class="dld-table">
+            <tr><th>A</th><th>B</th><th>C</th><th>F</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          </table>
+          <h4>Full Adder</h4>
+          <p>S = A⊕B⊕C, C<sub>out</sub> = A·B + C·(A⊕B)</p>
+          <h4>Circuit Design</h4>
+          <p>Use Antares simulator to build and test logic circuits.</p>
+        `,
+        ar: `
+          <h3>البوابات المنطقية وجداول الحقيقة</h3>
+          <h4>البوابات الأساسية</h4>
+          <table class="dld-table">
+            <tr><th>البوابة</th><th>الرمز</th><th>جدول الحقيقة</th></tr>
+            <tr><td>AND</td><td>A·B</td><td>00→0, 01→0, 10→0, 11→1</td></tr>
+            <tr><td>OR</td><td>A+B</td><td>00→0, 01→1, 10→1, 11→1</td></tr>
+            <tr><td>NOT</td><td>A'</td><td>0→1, 1→0</td></tr>
+            <tr><td>NAND</td><td>(A·B)'</td><td>00→1, 01→1, 10→1, 11→0</td></tr>
+            <tr><td>NOR</td><td>(A+B)'</td><td>00→1, 01→0, 10→0, 11→0</td></tr>
+            <tr><td>XOR</td><td>A⊕B</td><td>00→0, 01→1, 10→1, 11→0</td></tr>
+            <tr><td>XNOR</td><td>A⊙B</td><td>00→1, 01→0, 10→0, 11→1</td></tr>
+          </table>
+          <h4>مثال جدول حقيقة</h4>
+          <p>للتعبير F = A·B + A·C':</p>
+          <table class="dld-table">
+            <tr><th>A</th><th>B</th><th>C</th><th>F</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          </table>
+          <h4>الجامع الكامل (Full Adder)</h4>
+          <p>S = A⊕B⊕C, C<sub>out</sub> = A·B + C·(A⊕B)</p>
+        `
+      }
+    };
+
+    // ==================== STATE ====================
+    let currentLang = 'en';
+    let currentDecimal = 64;
+    let tutorialMode = 'bin2oct';
+    let currentMode = 'divide';
+    let currentNum = generateNumber();
+
+    // ==================== FUNCTIONS ====================
+    function switchLanguage() {
+      currentLang = currentLang === 'en' ? 'ar' : 'en';
+      localStorage.setItem('lang', currentLang);
+      document.documentElement.lang = currentLang;
+      document.body.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
+      document.querySelectorAll('[data-lang]').forEach(el => {
+        const key = el.getAttribute('data-lang');
+        if (translations[currentLang][key]) el.textContent = translations[currentLang][key];
+      });
+      document.getElementById('devName').textContent = translations[currentLang].devName;
+      document.getElementById('devCollege').textContent = translations[currentLang].devCollege;
+      document.getElementById('langLabel').textContent = translations[currentLang].langLabel;
+      renderModeButtons();
+      renderDLDSections();
+      updateSteps();
+      renderTutorial();
+      updateGameUI();
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const icon = document.getElementById('themeToggle').querySelector('i');
+      icon.className = document.body.classList.contains('dark') ? 'fas fa-sun' : 'fas fa-moon';
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // ==================== CONVERTER ====================
+    const decInput = document.getElementById('decInput');
+    const binInput = document.getElementById('binInput');
+    const octInput = document.getElementById('octInput');
+    const hexInput = document.getElementById('hexInput');
+    const stepsContainer = document.getElementById('stepsContainer');
+
+    function parseFloatBase(str, base) {
+      str = str.trim();
+      if (!str) return NaN;
+      const valid = {2:/^[01]+(\.[01]+)?$/, 8:/^[0-7]+(\.[0-7]+)?$/, 10:/^\d+(\.\d+)?$/, 16:/^[0-9A-Fa-f]+(\.[0-9A-Fa-f]+)?$/};
+      if (!valid[base].test(str)) return NaN;
+      const [intPart, fracPart=''] = str.split('.');
+      let intVal = parseInt(intPart || '0', base);
+      if (isNaN(intVal)) return NaN;
+      let fracVal = 0;
+      for (let i=0; i<fracPart.length; i++) {
+        let digit = parseInt(fracPart[i], base);
+        if (isNaN(digit)) return NaN;
+        fracVal += digit / Math.pow(base, i+1);
+      }
+      return intVal + fracVal;
+    }
+
+    function floatToBase(num, base) {
+      if (num === 0) return '0';
+      let intPart = Math.floor(Math.abs(num));
+      let fracPart = num - intPart;
+      let intStr = intPart.toString(base).toUpperCase();
+      if (fracPart === 0) return intStr;
+      let fracStr = '', maxDigits = 10;
+      while (fracPart > 0 && maxDigits--) {
+        fracPart *= base;
+        let digit = Math.floor(fracPart);
+        fracStr += digit.toString(base).toUpperCase();
+        fracPart -= digit;
+      }
+      return intStr + '.' + fracStr;
+    }
+
+    function updateAllConvFields() {
+      if (currentDecimal === null || isNaN(currentDecimal)) {
+        decInput.value = binInput.value = octInput.value = hexInput.value = '';
+        return;
+      }
+      decInput.value = currentDecimal.toString(10);
+      binInput.value = floatToBase(currentDecimal, 2);
+      octInput.value = floatToBase(currentDecimal, 8);
+      hexInput.value = floatToBase(currentDecimal, 16).toUpperCase();
+    }
+
+    function handleConvInput(e) {
+      const id = e.target.id;
+      const base = {decInput:10, binInput:2, octInput:8, hexInput:16}[id];
+      let val = parseFloatBase(e.target.value, base);
+      if (isNaN(val)) {
+        if (e.target.value === '') currentDecimal = null;
+      } else currentDecimal = val;
+      updateAllConvFields();
+      updateSteps();
+      renderTutorial();
+    }
+
+    decInput.addEventListener('input', handleConvInput);
+    binInput.addEventListener('input', handleConvInput);
+    octInput.addEventListener('input', handleConvInput);
+    hexInput.addEventListener('input', handleConvInput);
+    binInput.addEventListener('keypress', (e) => { if (!/[01.]/.test(e.key) && e.key!=='Backspace') e.preventDefault(); });
+    octInput.addEventListener('keypress', (e) => { if (!/[0-7.]/.test(e.key) && e.key!=='Backspace') e.preventDefault(); });
+    hexInput.addEventListener('keypress', (e) => { if (!/[0-9A-Fa-f.]/.test(e.key) && e.key!=='Backspace') e.preventDefault(); });
+
+    function computeSteps(num) {
+      num = Math.floor(num);
+      if (num <= 0) return [];
+      let steps = [], n = num;
+      while (n > 0) {
+        const q = Math.floor(n / 2), r = n % 2;
+        steps.push({ current:n, quotient:q, remainder:r, fractionIgnored: (n/2 - q) > 0 });
+        n = q;
+      }
+      return steps;
+    }
+
+    function updateSteps() {
+      stepsContainer.innerHTML = '';
+      if (currentDecimal === null || isNaN(currentDecimal) || Math.floor(currentDecimal) === 0) {
+        stepsContainer.innerHTML = `<div class="empty-message">${translations[currentLang].emptySteps}</div>`;
+        return;
+      }
+      const steps = computeSteps(Math.floor(currentDecimal));
+      steps.forEach((s, idx) => {
+        const card = document.createElement('div'); card.className = 'step-card';
+        card.style.animationDelay = `${idx*0.05}s`;
+        const fracText = s.fractionIgnored ? translations[currentLang].fractionIgnored : translations[currentLang].noFraction;
+        card.innerHTML = `<div class="step-num">${idx+1}</div>
+          <div class="step-expression"><span class="val">${s.current}</span> ÷ 2 = <span class="val">${s.quotient}</span> <span class="frac-text">(${fracText})</span></div>
+          <div class="step-remainder"><div class="rem-label">${translations[currentLang].recordedRemainder}</div><div class="rem-value">${s.remainder}</div></div>`;
+        stepsContainer.appendChild(card);
+      });
+    }
+
+    function padLeft(str,len,char='0') { while(str.length<len) str=char+str; return str; }
+
+    function renderTutorial() {
+      const display = document.getElementById('tutorialDisplay');
+      if (currentDecimal === null || isNaN(currentDecimal) || Math.floor(currentDecimal)!==currentDecimal) {
+        display.innerHTML = `<div class="empty-message">${translations[currentLang].noTutorialData}</div>`;
+        return;
+      }
+      const dec = Math.floor(currentDecimal);
+      const bin = dec.toString(2), oct = dec.toString(8), hex = dec.toString(16).toUpperCase();
+      let html = '';
+      switch(tutorialMode) {
+        case 'bin2oct': {
+          const padded = bin.length%3? padLeft(bin, bin.length+(3-bin.length%3)) : bin;
+          const groups = []; for(let i=0;i<padded.length;i+=3) groups.push(padded.substring(i,i+3));
+          html+=`<div style="margin-bottom:8px;font-weight:700;color:var(--primary)">(${bin})₂ → (${oct})₈</div>`;
+          groups.forEach(g => {
+            const sum = parseInt(g,2).toString(8);
+            html+=`<div style="margin:4px 0"><span class="group-bracket" style="display:inline-flex;border:2px dashed var(--warning);border-radius:10px;padding:4px 8px;gap:4px;">${g.split('').map(c=>`<span class="digit-cell" style="background:rgba(99,102,241,0.1);border-radius:4px;padding:2px 6px;${c==='1'?'background:var(--primary);color:white;':''}">${c}</span>`).join('')}</span> → <span class="result-box" style="background:rgba(34,197,94,0.2);border:1px solid var(--secondary);border-radius:6px;padding:4px 12px;color:var(--secondary);font-weight:700;">${sum}</span></div>`;
+          });
+          html+=`<div style="color:var(--secondary);font-weight:700;margin-top:8px">${translations[currentLang].result}: ${oct}</div>`;
+          break;
         }
-
-        langToggle.addEventListener('click', () => setLanguage(currentLang === 'en' ? 'ar' : 'en'));
-
-        // ---------- HELPERS ----------
-        const isValid = {
-            bin: (s) => /^[01]+$/.test(s),
-            oct: (s) => /^[0-7]+$/.test(s),
-            hex: (s) => /^[0-9a-fA-F]+$/.test(s)
-        };
-
-        function parseInput(str, type) {
-            const clean = str.trim();
-            if (clean === '') return null;
-            switch (type) {
-                case 'dec': { const n = parseInt(clean, 10); return isNaN(n) ? NaN : n; }
-                case 'bin': return isValid.bin(clean) ? parseInt(clean, 2) : NaN;
-                case 'oct': return isValid.oct(clean) ? parseInt(clean, 8) : NaN;
-                case 'hex': return isValid.hex(clean) ? parseInt(clean, 16) : NaN;
-                default: return NaN;
-            }
+        case 'oct2bin':
+          html+=`<div>(${oct})₈ → (${bin})₂</div>`;
+          oct.split('').forEach(d => {
+            const val = parseInt(d,8), bits = padLeft(val.toString(2),3);
+            html+=`<div style="margin:4px 0">${d} → ${bits}</div>`;
+          });
+          html+=`<div style="color:var(--secondary)">${translations[currentLang].result}: ${bin}</div>`;
+          break;
+        case 'bin2hex': {
+          const padded = bin.length%4? padLeft(bin, bin.length+(4-bin.length%4)) : bin;
+          const groups = []; for(let i=0;i<padded.length;i+=4) groups.push(padded.substring(i,i+4));
+          html+=`<div>(${bin})₂ → (${hex})₁₆</div>`;
+          groups.forEach(g => {
+            const sum = parseInt(g,2), hexChar = sum.toString(16).toUpperCase();
+            html+=`<div style="margin:4px 0">${g} → ${sum} = ${hexChar}</div>`;
+          });
+          html+=`<div style="color:var(--secondary)">${translations[currentLang].result}: ${hex}</div>`;
+          break;
         }
+        case 'hex2bin':
+          html+=`<div>(${hex})₁₆ → (${bin})₂</div>`;
+          hex.split('').forEach(d => {
+            const val = parseInt(d,16), bits = padLeft(val.toString(2),4);
+            html+=`<div style="margin:4px 0">${d} (${val}) → ${bits}</div>`;
+          });
+          html+=`<div style="color:var(--secondary)">${translations[currentLang].result}: ${bin}</div>`;
+          break;
+        case 'dec2bin': html=`<div>Decimal ${dec} → Binary: ${bin}</div>`; break;
+        case 'bin2dec': html=`<div>Binary ${bin} → Decimal: ${dec}</div>`; break;
+      }
+      display.innerHTML = html;
+    }
 
-        function clearAllFields() { decInput.value = ''; binInput.value = ''; octInput.value = ''; hexInput.value = ''; }
-        function fillAllFields(dec) {
-            decInput.value = dec.toString(10);
-            binInput.value = dec.toString(2);
-            octInput.value = dec.toString(8);
-            hexInput.value = dec.toString(16).toUpperCase();
-        }
+    document.getElementById('tutorialButtons').addEventListener('click', (e) => {
+      if (e.target.classList.contains('tutorial-btn')) {
+        document.querySelectorAll('.tutorial-btn').forEach(b=>b.classList.remove('active'));
+        e.target.classList.add('active');
+        tutorialMode = e.target.dataset.mode;
+        renderTutorial();
+      }
+    });
 
-        function updateAllFieldsExcept(sourceId) {
-            isUpdating = true;
-            if (currentDecimal === null) { clearAllFields(); updateStepsUI(); renderTutorial(); isUpdating = false; return; }
-            const dec = currentDecimal;
-            if (sourceId !== 'decInput') { decInput.value = dec.toString(10); triggerPop(decInput); }
-            if (sourceId !== 'binInput') { binInput.value = dec.toString(2); triggerPop(binInput); }
-            if (sourceId !== 'octInput') { octInput.value = dec.toString(8); triggerPop(octInput); }
-            if (sourceId !== 'hexInput') { hexInput.value = dec.toString(16).toUpperCase(); triggerPop(hexInput); }
-            isUpdating = false;
-            updateStepsUI();
-            renderTutorial();
-        }
+    function toggleTutorial() {
+      document.getElementById('tutorialContent').classList.toggle('show');
+      document.getElementById('tutorialToggle').classList.toggle('open');
+    }
 
-        function triggerPop(input) { input.classList.add('pop-effect'); setTimeout(() => input.classList.remove('pop-effect'), 300); }
+    // ==================== TRAINER ====================
+    const modes = {
+      divide:   { icon: 'fa-divide',   question: (n) => n + " ÷ 2 = ?",         answer: (n) => n / 2 },
+      multiply: { icon: 'fa-times',    question: (n) => n + " × 2 = ?",         answer: (n) => n * 2 },
+      dec2bin:  { icon: 'fa-exchange-alt', question: (n) => `Convert ${n} to Binary`, answer: (n) => n.toString(2) },
+      dec2oct:  { icon: 'fa-exchange-alt', question: (n) => `Convert ${n} to Octal`, answer: (n) => n.toString(8) },
+      dec2hex:  { icon: 'fa-exchange-alt', question: (n) => `Convert ${n} to Hex`, answer: (n) => n.toString(16).toUpperCase() },
+      bin2dec:  { icon: 'fa-exchange-alt', question: (n) => `Binary ${n.toString(2)} to Decimal`, answer: (n) => n },
+      oct2dec:  { icon: 'fa-exchange-alt', question: (n) => `Octal ${n.toString(8)} to Decimal`, answer: (n) => n },
+      hex2dec:  { icon: 'fa-exchange-alt', question: (n) => `Hex ${n.toString(16).toUpperCase()} to Decimal`, answer: (n) => n }
+    };
 
-        // ---------- INPUT HANDLING ----------
-        function handleChange(e) {
-            if (isUpdating) return;
-            const src = e.target;
-            const typeMap = { decInput: 'dec', binInput: 'bin', octInput: 'oct', hexInput: 'hex' };
-            const type = typeMap[src.id];
-            const val = parseInput(src.value, type);
-            if (val === null) { currentDecimal = null; updateAllFieldsExcept(src.id); return; }
-            if (isNaN(val) || val < 0) { updateAllFieldsExcept(null); return; }
-            currentDecimal = Math.min(val, 1_000_000_000);
-            updateAllFieldsExcept(src.id);
-        }
+    const statsPerMode = {
+      divide:{score:0,correct:0,wrong:0,history:[]}, multiply:{score:0,correct:0,wrong:0,history:[]},
+      dec2bin:{score:0,correct:0,wrong:0,history:[]}, dec2oct:{score:0,correct:0,wrong:0,history:[]},
+      dec2hex:{score:0,correct:0,wrong:0,history:[]}, bin2dec:{score:0,correct:0,wrong:0,history:[]},
+      oct2dec:{score:0,correct:0,wrong:0,history:[]}, hex2dec:{score:0,correct:0,wrong:0,history:[]}
+    };
 
-        function debouncedHandle(e) { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => handleChange(e), 80); }
+    function generateNumber() { return Math.floor(Math.random() * 200) + 10; }
+    function getStats() { return statsPerMode[currentMode]; }
 
-        allInputs.forEach(inp => {
-            inp.addEventListener('input', debouncedHandle);
-            inp.addEventListener('focus', () => inp.select());
-            inp.addEventListener('click', () => inp.select());
-        });
+    function setMode(modeKey) {
+      currentMode = modeKey;
+      currentNum = generateNumber();
+      updateGameUI();
+      document.getElementById('feedback').innerText = '';
+    }
 
-        binInput.addEventListener('keypress', (e) => { if (!/[01]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && !e.ctrlKey) e.preventDefault(); });
-        octInput.addEventListener('keypress', (e) => { if (!/[0-7]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && !e.ctrlKey) e.preventDefault(); });
-        hexInput.addEventListener('keypress', (e) => { if (!/[0-9a-fA-F]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && !e.ctrlKey) e.preventDefault(); });
+    function resetCurrentMode() {
+      const stats = getStats();
+      stats.score = 0; stats.correct = 0; stats.wrong = 0; stats.history = [];
+      currentNum = generateNumber();
+      updateGameUI();
+      document.getElementById('feedback').innerText = '';
+    }
 
-        // ---------- DIVISION STEPS ----------
-        function computeSteps(num) {
-            if (num === null || num === 0) return [];
-            const steps = []; let n = num, cnt = 0;
-            while (n > 0) {
-                cnt++;
-                const quotient = Math.floor(n / 2);
-                const rem = n % 2;
-                const fraction = (n / 2) - quotient;
-                steps.push({ step: cnt, current: n, quotient, remainder: rem, fractionIgnored: fraction > 0 });
-                n = quotient;
-            }
-            return steps;
-        }
+    function checkAnswer() {
+      const input = document.getElementById('answer').value.trim();
+      const modeFn = modes[currentMode];
+      if (!input) return;
+      const correctAnswer = modeFn.answer(currentNum);
+      const isCorrect = (input.toString().toUpperCase() === correctAnswer.toString().toUpperCase());
+      const stats = getStats();
+      if (isCorrect) {
+        stats.correct++; stats.score += 10;
+        document.getElementById('feedback').innerHTML = translations[currentLang].correctFeedback;
+        document.getElementById('feedback').style.color = 'var(--secondary)';
+      } else {
+        stats.wrong++;
+        document.getElementById('feedback').innerHTML = translations[currentLang].wrongFeedback + correctAnswer;
+        document.getElementById('feedback').style.color = 'var(--error)';
+      }
+      stats.history.unshift({ question: modeFn.question(currentNum), user: input, correct: correctAnswer, result: isCorrect });
+      if (stats.history.length > 5) stats.history.pop();
+      currentNum = generateNumber();
+      document.getElementById('answer').value = '';
+      updateGameUI();
+    }
 
-        function renderSteps(steps) {
-            stepsContainer.innerHTML = '';
-            if (!steps.length) {
-                const msg = document.createElement('div'); msg.className = 'empty-message';
-                msg.setAttribute('data-lang', 'emptySteps'); msg.textContent = t[currentLang].emptySteps;
-                stepsContainer.appendChild(msg); return;
-            }
-            steps.forEach((s, idx) => {
-                const card = document.createElement('div'); card.className = 'step-card';
-                card.style.animationDelay = `${idx * 0.04}s`;
-                const fracText = s.fractionIgnored ? t[currentLang].fractionIgnored : t[currentLang].noFraction;
-                const remLabel = t[currentLang].recordedRemainder;
-                card.innerHTML = `<div class="step-num">${s.step}</div>
-                    <div class="step-expression"><span class="val">${s.current}</span> ÷ 2 = <span class="val">${s.quotient}</span> <span class="frac-text">(${fracText})</span></div>
-                    <div class="step-remainder"><div class="rem-label">${remLabel}</div><div class="rem-value">${s.remainder}</div></div>`;
-                stepsContainer.appendChild(card);
-            });
-        }
+    function updateGameUI() {
+      const stats = getStats();
+      document.getElementById('question').textContent = modes[currentMode].question(currentNum);
+      document.getElementById('score').textContent = stats.score;
+      document.getElementById('correctCount').textContent = stats.correct;
+      document.getElementById('wrongCount').textContent = stats.wrong;
+      const total = stats.correct + stats.wrong;
+      document.getElementById('accuracy').textContent = (total ? Math.floor((stats.correct/total)*100) : 0) + '%';
+      document.getElementById('level').textContent = Math.floor(stats.score/50) + 1;
+      document.getElementById('totalCorrect').textContent = stats.correct;
+      document.getElementById('progressFill').style.width = (stats.score % 100) + '%';
+      const list = document.getElementById('historyList');
+      list.innerHTML = '';
+      stats.history.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `${item.result ? '✔' : '❌'} ${item.question} Your: ${item.user} → Correct: ${item.correct}`;
+        list.appendChild(li);
+      });
+    }
 
-        function updateStepsUI() { renderSteps(computeSteps(currentDecimal)); }
+    function renderModeButtons() {
+      const container = document.getElementById('modeButtons');
+      container.innerHTML = '';
+      Object.keys(modes).forEach(modeKey => {
+        const btn = document.createElement('button');
+        btn.className = 'mode-btn' + (modeKey === currentMode ? ' active' : '');
+        const labelKey = 'mode' + modeKey.charAt(0).toUpperCase() + modeKey.slice(1);
+        btn.innerHTML = `<i class="fas ${modes[modeKey].icon}"></i> ${translations[currentLang][labelKey] || modeKey}`;
+        btn.onclick = () => { setMode(modeKey); renderModeButtons(); };
+        container.appendChild(btn);
+      });
+    }
 
-        // ---------- TUTORIAL LOGIC ----------
-        function padLeft(str, len, char = '0') { while (str.length < len) str = char + str; return str; }
+    function toggleTrainer() {
+      document.getElementById('trainerContent').classList.toggle('show');
+      document.getElementById('trainerToggle').classList.toggle('collapsed');
+    }
 
-        function binToOctalSteps(bin) {
-            bin = bin.replace(/^0+/, '') || '0';
-            const padded = bin.length % 3 === 0 ? bin : padLeft(bin, bin.length + (3 - bin.length % 3));
-            const groups = [];
-            for (let i = 0; i < padded.length; i += 3) groups.push(padded.substring(i, i + 3));
-            const weights = [4, 2, 1];
-            const result = groups.map(g => {
-                let sum = 0;
-                for (let i = 0; i < 3; i++) if (g[i] === '1') sum += weights[i];
-                return { group: g, sum: sum.toString(8) };
-            });
-            return { padded, groups: result, weights, octal: result.map(r => r.sum).join('') };
-        }
+    // ==================== DLD ACCORDION ====================
+    function renderDLDSections() {
+      const container = document.getElementById('dldAccordion');
+      const sections = [
+        { id: 'sec1', titleKey: 'dldSection1Title', icon: 'fa-list-ol' },
+        { id: 'sec2', titleKey: 'dldSection2Title', icon: 'fa-exchange-alt' },
+        { id: 'sec3', titleKey: 'dldSection3Title', icon: 'fa-minus-circle' },
+        { id: 'sec4', titleKey: 'dldSection4Title', icon: 'fa-barcode' },
+        { id: 'sec5', titleKey: 'dldSection5Title', icon: 'fa-superscript' },
+        { id: 'sec6', titleKey: 'dldSection6Title', icon: 'fa-microchip' }
+      ];
+      container.innerHTML = '';
+      sections.forEach((sec, idx) => {
+        const div = document.createElement('div');
+        div.className = 'dld-section';
+        const isOpen = localStorage.getItem('dld_open_' + sec.id) === 'true';
+        div.innerHTML = `
+          <div class="dld-section-header ${isOpen ? 'open' : ''}" onclick="toggleDLDSection('${sec.id}', this)" data-sec="${sec.id}">
+            <span class="sec-num">${idx + 1}</span>
+            <i class="fas ${sec.icon}" style="color:var(--primary);"></i>
+            <span>${translations[currentLang][sec.titleKey]}</span>
+            <i class="fas fa-chevron-down chevron"></i>
+          </div>
+          <div class="dld-section-body ${isOpen ? 'show' : ''}" id="dldBody_${sec.id}">
+            ${dldContent[sec.id][currentLang]}
+          </div>`;
+        container.appendChild(div);
+      });
+    }
 
-        function octalToBinSteps(oct) {
-            const digits = oct.split('');
-            const weights = [4, 2, 1];
-            const result = digits.map(d => {
-                const val = parseInt(d, 8);
-                const bin = padLeft(val.toString(2), 3);
-                return { digit: d, val, bin };
-            });
-            return { digits: result, weights, binary: result.map(r => r.bin).join('').replace(/^0+/, '') || '0' };
-        }
+    function toggleDLDSection(secId, header) {
+      const body = document.getElementById('dldBody_' + secId);
+      const isOpen = body.classList.toggle('show');
+      header.classList.toggle('open', isOpen);
+      localStorage.setItem('dld_open_' + secId, isOpen);
+    }
 
-        function binToHexSteps(bin) {
-            bin = bin.replace(/^0+/, '') || '0';
-            const padded = bin.length % 4 === 0 ? bin : padLeft(bin, bin.length + (4 - bin.length % 4));
-            const groups = [];
-            for (let i = 0; i < padded.length; i += 4) groups.push(padded.substring(i, i + 4));
-            const weights = [8, 4, 2, 1];
-            const hexDigits = '0123456789ABCDEF';
-            const result = groups.map(g => {
-                let sum = 0;
-                for (let i = 0; i < 4; i++) if (g[i] === '1') sum += weights[i];
-                return { group: g, sum: sum, hex: hexDigits[sum] };
-            });
-            return { padded, groups: result, weights, hex: result.map(r => r.hex).join('') };
-        }
-
-        function hexToBinSteps(hex) {
-            const digits = hex.toUpperCase().split('');
-            const hexDigits = '0123456789ABCDEF';
-            const weights = [8, 4, 2, 1];
-            const result = digits.map(d => {
-                const val = hexDigits.indexOf(d);
-                const bin = padLeft(val.toString(2), 4);
-                return { digit: d, val, bin };
-            });
-            return { digits: result, weights, binary: result.map(r => r.bin).join('').replace(/^0+/, '') || '0' };
-        }
-
-        function renderTutorial() {
-            if (currentDecimal === null) {
-                tutorialDisplay.innerHTML = `<div class="empty-message">${t[currentLang].noTutorialData}</div>`;
-                return;
-            }
-            const dec = currentDecimal;
-            const bin = dec.toString(2);
-            const oct = dec.toString(8);
-            const hex = dec.toString(16).toUpperCase();
-            let html = '';
-
-            switch (tutorialMode) {
-                case 'bin2oct': {
-                    const data = binToOctalSteps(bin);
-                    html += `<div style="margin-bottom:16px;font-weight:700;color:var(--accent);">(${bin})₂ → (${data.octal})₈</div>`;
-                    html += `<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px;">`;
-                    html += `<span style="color:var(--muted);">${t[currentLang].weight421}:</span>`;
-                    data.weights.forEach(w => html += `<span class="weight-cell header">${w}</span>`);
-                    html += `</div>`;
-                    data.groups.forEach((g, i) => {
-                        html += `<div class="step-row" style="animation-delay:${i*0.2}s;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">`;
-                        html += `<span class="step-num" style="width:24px;height:24px;font-size:0.7rem;">${i+1}</span>`;
-                        html += `<span class="group-bracket">`;
-                        g.group.split('').forEach(ch => html += `<span class="digit-cell ${ch==='1'?'highlight':''}">${ch}</span>`);
-                        html += `</span>`;
-                        html += `<span class="arrow">→</span>`;
-                        html += `<span class="result-box">${g.sum}</span>`;
-                        html += `</div>`;
-                    });
-                    html += `<div style="margin-top:12px;color:var(--success);font-weight:700;">${t[currentLang].result}: ${data.octal}</div>`;
-                    break;
-                }
-                case 'oct2bin': {
-                    const data = octalToBinSteps(oct);
-                    html += `<div style="margin-bottom:16px;font-weight:700;color:var(--accent);">(${oct})₈ → (${data.binary})₂</div>`;
-                    html += `<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px;">`;
-                    html += `<span style="color:var(--muted);">${t[currentLang].weight421}:</span>`;
-                    data.weights.forEach(w => html += `<span class="weight-cell header">${w}</span>`);
-                    html += `</div>`;
-                    data.digits.forEach((d, i) => {
-                        html += `<div class="step-row" style="animation-delay:${i*0.2}s;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">`;
-                        html += `<span class="step-num" style="width:24px;height:24px;font-size:0.7rem;">${i+1}</span>`;
-                        html += `<span class="digit-cell highlight">${d.digit}</span>`;
-                        html += `<span class="arrow">→</span>`;
-                        html += `<span class="group-bracket">`;
-                        d.bin.split('').forEach(ch => html += `<span class="digit-cell ${ch==='1'?'highlight':''}">${ch}</span>`);
-                        html += `</span>`;
-                        html += `</div>`;
-                    });
-                    html += `<div style="margin-top:12px;color:var(--success);font-weight:700;">${t[currentLang].result}: ${data.binary}</div>`;
-                    break;
-                }
-                case 'bin2hex': {
-                    const data = binToHexSteps(bin);
-                    html += `<div style="margin-bottom:16px;font-weight:700;color:var(--accent);">(${bin})₂ → (${data.hex})₁₆</div>`;
-                    html += `<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px;">`;
-                    html += `<span style="color:var(--muted);">${t[currentLang].weight8421}:</span>`;
-                    data.weights.forEach(w => html += `<span class="weight-cell header">${w}</span>`);
-                    html += `</div>`;
-                    data.groups.forEach((g, i) => {
-                        html += `<div class="step-row" style="animation-delay:${i*0.2}s;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">`;
-                        html += `<span class="step-num" style="width:24px;height:24px;font-size:0.7rem;">${i+1}</span>`;
-                        html += `<span class="group-bracket">`;
-                        g.group.split('').forEach(ch => html += `<span class="digit-cell ${ch==='1'?'highlight':''}">${ch}</span>`);
-                        html += `</span>`;
-                        html += `<span class="arrow">→</span>`;
-                        html += `<span class="result-box">${g.sum} = ${g.hex}</span>`;
-                        html += `</div>`;
-                    });
-                    html += `<div style="margin-top:12px;color:var(--success);font-weight:700;">${t[currentLang].result}: ${data.hex}</div>`;
-                    break;
-                }
-                case 'hex2bin': {
-                    const data = hexToBinSteps(hex);
-                    html += `<div style="margin-bottom:16px;font-weight:700;color:var(--accent);">(${hex})₁₆ → (${data.binary})₂</div>`;
-                    html += `<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px;">`;
-                    html += `<span style="color:var(--muted);">${t[currentLang].weight8421}:</span>`;
-                    data.weights.forEach(w => html += `<span class="weight-cell header">${w}</span>`);
-                    html += `</div>`;
-                    data.digits.forEach((d, i) => {
-                        html += `<div class="step-row" style="animation-delay:${i*0.2}s;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">`;
-                        html += `<span class="step-num" style="width:24px;height:24px;font-size:0.7rem;">${i+1}</span>`;
-                        html += `<span class="digit-cell highlight">${d.digit} (${d.val})</span>`;
-                        html += `<span class="arrow">→</span>`;
-                        html += `<span class="group-bracket">`;
-                        d.bin.split('').forEach(ch => html += `<span class="digit-cell ${ch==='1'?'highlight':''}">${ch}</span>`);
-                        html += `</span>`;
-                        html += `</div>`;
-                    });
-                    html += `<div style="margin-top:12px;color:var(--success);font-weight:700;">${t[currentLang].result}: ${data.binary}</div>`;
-                    break;
-                }
-                case 'dec2bin': {
-                    const steps = computeSteps(dec);
-                    html += `<div style="margin-bottom:16px;font-weight:700;color:var(--accent);">(${dec})₁₀ → (${bin})₂</div>`;
-                    html += `<div style="color:var(--muted);margin-bottom:8px;">Repeated division by 2 (remainders read bottom-up):</div>`;
-                    steps.forEach((s, i) => {
-                        html += `<div class="step-row" style="animation-delay:${i*0.2}s;">`;
-                        html += `<span class="step-num" style="width:24px;height:24px;font-size:0.7rem;">${s.step}</span>`;
-                        html += `<span>${s.current} ÷ 2 = ${s.quotient} </span>`;
-                        html += `<span style="color:var(--warning);font-weight:700;">remainder ${s.remainder}</span>`;
-                        html += `</div>`;
-                    });
-                    html += `<div style="margin-top:12px;color:var(--success);font-weight:700;">Read remainders from bottom to top: ${bin}</div>`;
-                    break;
-                }
-                case 'bin2dec': {
-                    const bits = bin.split('').reverse();
-                    html += `<div style="margin-bottom:16px;font-weight:700;color:var(--accent);">(${bin})₂ → (${dec})₁₀</div>`;
-                    html += `<div style="color:var(--muted);margin-bottom:8px;">Multiply each bit by 2^position:</div>`;
-                    bits.forEach((bit, pos) => {
-                        if (bit === '1') {
-                            const val = Math.pow(2, pos);
-                            html += `<div class="step-row" style="animation-delay:${pos*0.15}s;">`;
-                            html += `<span>1 × 2^${pos} = ${val}</span>`;
-                            html += `</div>`;
-                        }
-                    });
-                    html += `<div style="margin-top:12px;color:var(--success);font-weight:700;">Sum = ${dec}</div>`;
-                    break;
-                }
-            }
-            tutorialDisplay.innerHTML = html;
-        }
-
-        // ---------- TUTORIAL CONTROLS ----------
-        tutorialToggle.addEventListener('click', () => {
-            tutorialContent.classList.toggle('show');
-            tutorialToggle.classList.toggle('open');
-            if (tutorialContent.classList.contains('show')) renderTutorial();
-        });
-
-        tutorialButtons.addEventListener('click', (e) => {
-            if (e.target.classList.contains('tutorial-btn')) {
-                tutorialButtons.querySelectorAll('.tutorial-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                tutorialMode = e.target.dataset.mode;
-                renderTutorial();
-            }
-        });
-
-        // ---------- INIT ----------
-        function init() {
-            setLanguage(localStorage.getItem('lang') || 'en');
-            currentDecimal = 13;
-            fillAllFields(13);
-            updateStepsUI();
-            tutorialContent.classList.add('show');
-            tutorialToggle.classList.add('open');
-            renderTutorial();
-        }
-
-        init();
-    })();
-</script>
+    // ==================== INIT ====================
+    window.onload = function() {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark');
+        document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+      }
+      currentLang = localStorage.getItem('lang') || 'en';
+      switchLanguage();
+      updateAllConvFields();
+      updateSteps();
+      renderTutorial();
+      renderModeButtons();
+      updateGameUI();
+      document.getElementById('trainerContent').classList.remove('show');
+      document.getElementById('trainerToggle').classList.add('collapsed');
+      document.getElementById('tutorialContent').classList.add('show');
+      document.getElementById('tutorialToggle').classList.add('open');
+      document.getElementById('answer').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAnswer(); });
+    };
+  </script>
 </body>
 </html>
